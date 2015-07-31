@@ -2,6 +2,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.initConfig({
     jade: {
@@ -11,11 +12,11 @@ module.exports = function(grunt) {
           pretty: true
         },
         files: [ {
-          cwd: "assets/views",
-          src: "**/*.jade",
-          dest: "public",
+          cwd: 'assets/views',
+          src: '**/*.jade',
+          dest: 'public',
           expand: true,
-          ext: ".html"
+          ext: '.html'
         } ]
       }
     },    
@@ -39,14 +40,27 @@ module.exports = function(grunt) {
       styles: {
         files: [
           'less/main.less',
+          '**/*.jade'
         ],
-        tasks: ['less'],
+        tasks: ['less','jade'],
         options: {
           nospawn: true
+        }
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          livereload: true,
+          base: 'public',
+          port: 9800,
+          useAvailablePort: true
         }
       }
     }
   });
 
   grunt.registerTask('default', ['jade','less']);
+  grunt.registerTask('serve', ['jade','less','connect:server','watch']);
 };
